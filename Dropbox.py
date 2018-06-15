@@ -104,7 +104,7 @@ def downloadUserFolder(dbmid, username, root):
 
             if len(dest) >= 255:
                 dest = root+username+'\\255\\'+filename
-                logging.debug("____ {} Exceeded Windows 255 char limit and was renamed a moved to 255 folder".format(dest))
+                logging.debug("____ {} Exceeded Windows 255 char limit and was renamed a moved to 255 folder".format(dest.encode("utf-8")))
                 # Write to log file the orginal dropbox path of this folder as it may exceed the windows 255 char limit
             else:
                 pass
@@ -119,7 +119,7 @@ def downloadUserFolder(dbmid, username, root):
 
             if size >= 524288000 and os.path.isfile(dest) != True:
 
-                logging.debug("DropBox: {} (Large File) Downloading...".format(fullpath))
+                logging.debug("DropBox: {} (Large File) Downloading...".format(fullpath.encode("utf-8")))
                 DropboxAPIArg = '{"path": "'+orgpath+'"}'
 
                 headers = {
@@ -136,15 +136,15 @@ def downloadUserFolder(dbmid, username, root):
                         if chunk:  # filter out keep-alive new chunks
                             handle.write(chunk)
 
-                    logging.debug("{} File successfully downloaded.".format(dest))
+                    logging.debug("{} File successfully downloaded.".format(dest.encode("utf-8")))
 
                 except WindowsError:
 
-                    logging.debug("{} Could not download!".format(dest))
+                    logging.debug("{} Could not download!".format(dest.encode("utf-8")))
 
             elif os.path.isfile(dest) != True:
 
-                logging.debug("DropBox: {} Downloading...".format(fullpath))
+                logging.debug("DropBox: {} Downloading...".format(fullpath.encode("utf-8")))
                 DropboxAPIArg = '{"path": "' + orgpath + '"}'
 
                 headers = {
@@ -159,22 +159,22 @@ def downloadUserFolder(dbmid, username, root):
                     with open(dest, 'wb') as f:
                         f.write(response.content)
 
-                    logging.debug("{} File successfully downloaded.".format(dest))
+                    logging.debug("{} File successfully downloaded.".format(dest.encode("utf-8")))
 
                 except WindowsError:
 
-                    logging.debug("{} Could not download!".format(dest))
+                    logging.debug("{} Could not download!".format(dest.encode("utf-8")))
 
             else:
 
-                logging.debug("{} File has already been downloaded...".format(dest))
+                logging.debug("{} File has already been downloaded...".format(dest.encode("utf-8")))
 
 # Performs the download function for each user returned via getAllUsers(). Remember to set the limit value in that function
 # as it can be set to a max of 1000 (Which is the default) if there are ever more users than that
 # a new function similar to listFolderContinue() will need to be created to paginate the results of getAllUsers().
 def MassUserCopy():
     global root
-	global domain
+    global domain
 
     content = getAllUsers()
     for user in content:
@@ -183,11 +183,35 @@ def MassUserCopy():
         dbmid = user['profile']['team_member_id']
         email = user['profile']['email']
         username = email.replace(domain,'')
-
-        #logging.debug("Starting download function for the following status: {}".format(status))
+       
         if 'active' in status:
                 logging.debug("Starting download function for the following dbmid: {}".format(dbmid))
                 logging.debug("Starting download function for the following user: {}".format(username))
                 downloadUserFolder(dbmid, username, root)
+
+    logging.debug("Script has completed. (See log for errors)")
+
+# Performs the download function for each user in a CSV. Adjust the headers according to your CSV file.
+def MassUserCopyFromCSV(csv_path):
+    global root
+    global domain
+
+    with open(csv_path, 'r') as csv_file:
+        csv_reader = csv.reader(csv_file)
+        next(csv_reader) # Skip first row (Headers)
+        content = csv_reader
+
+        for line in content:
+
+            # Make sure to adjust if needed!!
+            status = str(line[4]) # Status header is in postion 4 of my CSV
+            dbmid = line[0] # dbmid header is in postion 0 of my CSV
+            email = line[2] # email header is in postion 2 of my CSV
+            username = email.replace(domain,'')
+            
+            if 'active' in status:
+                    logging.debug("Starting download function for the following dbmid: {}".format(dbmid))
+                    logging.debug("Starting download function for the following user: {}".format(username))
+                    downloadUserFolder(dbmid, username, root)
 
     logging.debug("Script has completed. (See log for errors)")
