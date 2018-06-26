@@ -21,7 +21,8 @@ logging.basicConfig(filename=logFile, level=logging.DEBUG,
 
 # Retrieves all files for the user except for any exclusions. See line 36 & 57.
 def get_user_files(dbmid):
-
+    alluserfiles = []	
+	
     headers = {
         'Authorization': 'Bearer {}'.format(token),
         'Content-Type': 'application/json; charset=utf-8',  # Changed this char set
@@ -143,13 +144,13 @@ def download_user_files(dbmid, username, root):
             dirlen = len(dirsplit)
             for i in range(1, dirlen):  # Set to 1 to skip the ':' in the root path C:\\ etc...
                 if ':' in dirsplit[i]:
-                    badchar = dirsplit[i].replace(':', '-BADCHAR-')
+                    badchar = dirsplit[i].replace(':', '-')
                     dest = dest.replace(dirsplit[i], badchar)
 
                     dest = dest + '\\' + filename
                     logging.debug("____ {} File name had a bad char in it and was renamed. '-'".format(dest.encode("utf-8")))
 				
-				elif '*' in dirsplit[i]:
+		elif '*' in dirsplit[i]:
                     badchar = dirsplit[i].replace('*', '-')
                     dest = dest.replace(dirsplit[i], badchar)
 
