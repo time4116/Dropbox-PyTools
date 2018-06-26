@@ -122,7 +122,7 @@ def download_user_files(dbmid, username, root):
 
                         except Exception as e:
                             print('Could not delete {}'.format(dest.encode("utf-8")))
-                            logging.debug("{} Could not download! {}".format(dest.encode("utf-8"),e.encode("utf-8"))
+                            logging.debug("{} Could not download! {}".format(dest.encode("utf-8"),e.encode("utf-8")))
             except:
                 pass
         #print('current blacklist: {}'.format(do_not_dl))
