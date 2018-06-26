@@ -34,7 +34,9 @@ def get_user_files(dbmid):
     response = requests.post('https://api.dropboxapi.com/2/files/list_folder', headers=headers, data=data)
     json = response.json()
     for i in json['entries']:
-        if '/_Teams1' not in i['path_display'] or '/_Teams2' not in i['path_display'] or '/__Teams3' not in i['path_display']:
+	# Do not do this >> if '/_Teams1' not in i['path_display'] or '/_Teams2' not in i['path_display']
+	# Instead create another elsif statement...
+        if '/_Teams1' not in i['path_display']:
             alluserfiles.append(i)
     
     while json['has_more']:
@@ -55,7 +57,8 @@ def get_user_files(dbmid):
                     print('Status was okay. {}'.format(response.status_code))
                     json = response.json()
                     for i in json['entries']:
-                        if '/_Teams1' not in i['path_display'] or '/_Teams2' not in i['path_display'] or '/__Teams3' not in i['path_display']:
+			# See line 39
+                        if '/_Teams1' not in i['path_display']:
                             alluserfiles.append(i)
 
                 else:
@@ -113,13 +116,13 @@ def download_user_files(dbmid, username, root):
                     if os.path.isdir(dest) == True:
 
                         try:
-                            shutil.rmtree(dest)
-                            print('Removing as the user is not the owner of this shared folder: {}'.format(dest.encode("utf-8")))
+			    print('Removing as the user is not the owner of this shared folder: {}'.format(dest.encode("utf-8")))
+                            shutil.rmtree(dest)                            
                             logging.debug("{} Removing as the user is not the owner of this shared folder.".format(dest.encode("utf-8")))
 
-                        except WindowsError:
+                        except Exception as e:
                             print('Could not delete {}'.format(dest.encode("utf-8")))
-                            logging.debug("{} Could not download!".format(dest.encode("utf-8")))
+                            logging.debug("{} Could not download! {}".format(dest.encode("utf-8"),e.encode("utf-8"))
             except:
                 pass
         #print('current blacklist: {}'.format(do_not_dl))
