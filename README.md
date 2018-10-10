@@ -19,6 +19,10 @@ of deleted files. I will continue to add other functionality as needed.
 The first thing you will need to do is generate your API key. There are basically several methods to do this, one is to generate a personal key and the latter is to generate a buisness key. It just depends on what your end goal is. I will be using the buisness key.
 
 ```python
-s = "Python syntax highlighting"
-print s
+import requests
+
+# API token from https://www.dropbox.com/developers/apps (I'm using a Dropbox Business API with Team member file access)
+token = 'Your Key'
+
 ```
+The Dropbox REST API documentation examples are in curl. We can use the very helpful [site](https://curl.trillworks.com/) to convert these examples in to Python requests.
