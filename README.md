@@ -18,6 +18,8 @@ of deleted files. I will continue to add other functionality as needed.
 
 The first thing you will need to do is generate your [API key](https://www.dropbox.com/developers/apps). There are basically several methods to do this, one is to generate a personal key and the latter is to generate a buisness key. It just depends on what your end goal is. I will be using the buisness key.
 
+![alt text](https://github.com/time4116/Dropbox-PyTools/blob/master/images/APIPage.PNG)
+
 The Dropbox REST API [documentation](https://www.dropbox.com/developers/documentation/http/teams) examples are in curl. We can use this very helpful [site](https://curl.trillworks.com/) to convert these examples in to Python requests.
 
 Lets look at the below function which gets 1000 users and does not include removed users.
