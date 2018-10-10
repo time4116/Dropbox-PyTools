@@ -17,3 +17,8 @@ of deleted files. I will continue to add other functionality as needed.
 ## How to get started with Python and the Dropbox REST API
 
 The first thing you will need to do is generate your API key. There are basically several methods to do this, one is to generate a personal key and the latter is to generate a buisness key. It just depends on what your end goal is. I will be using the buisness key.
+
+```python
+s = "Python syntax highlighting"
+print s
+```
