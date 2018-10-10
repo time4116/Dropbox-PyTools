@@ -1,4 +1,6 @@
-# Dropbox-PyTools
+# How to get started with Python and the Dropbox REST API
+
+## Dropbox-PyTools
 Helpful functions that leverage the Dropbox API v2 (HTTP endpoints). The main goal of this project was 
 to download all users Dropbox data via the API. However, I've added tools for performing bulk restores
 of deleted files. I will continue to add other functionality as needed.
